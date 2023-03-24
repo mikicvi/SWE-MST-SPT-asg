@@ -36,6 +36,13 @@ class Heap
 
         // code yourself
         // must use hPos[] and dist[] arrays
+        a[0] = Integer.MAX_VALUE;
+        while(v > a[k/2])
+        {
+            a[k] = a[k/2];
+            k = k/2;
+        }
+        a[k] = v;
     }
 
 
@@ -47,6 +54,23 @@ class Heap
         
         // code yourself 
         // must use hPos[] and dist[] arrays
+        j = 2*k;
+        while(j <= N)
+        {
+            if(j < N && dist[a[j]] < dist[a[j+1]])
+            {
+                j++;
+            }
+            if(dist[v] >= dist[a[j]])
+            {
+                break;
+            }
+            a[k] = a[j];
+            k = j;
+            j = 2*k;
+        }
+
+
     }
 
 
@@ -132,7 +156,22 @@ class Graph {
 
            
             
-            // write code to put edge into adjacency matrix     
+            // write code to put edge into adjacency matrix
+            
+            Node n = new Node();
+            n.vert = v;
+            n.wgt = wgt;
+            n.next = adj[u];
+            adj[u] = n;
+
+            Node n2 = new Node();
+            n2.vert = u;
+            n2.wgt = wgt;
+            n2.next = adj[v];
+            adj[v] = n2;
+
+            
+
             
         }	       
     }
