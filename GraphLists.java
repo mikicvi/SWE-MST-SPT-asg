@@ -36,13 +36,13 @@ class Heap
 
         // code yourself
         // must use hPos[] and dist[] arrays
+
         a[0] = Integer.MAX_VALUE;
-        while(v > a[k/2])
+        while(dist[v] > dist[a[k/2]])
         {
             a[k] = a[k/2];
-            k = k/2;
+            hPos[a[k]] = k;
         }
-        a[k] = v;
     }
 
 
@@ -204,6 +204,8 @@ class Graph {
         int[]  dist, parent, hPos;
         Node t;
 
+        dist = new int[V+1];
+        hPos = new int[V+1];
         //code here
         
         //dist[s] = 0;
