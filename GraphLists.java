@@ -38,10 +38,16 @@ class Heap
         // must use hPos[] and dist[] arrays
 
         a[0] = Integer.MAX_VALUE;
-        while(dist[v] > dist[a[k/2]])
+        while(dist[v] > dist[a[k/2]]) // while the parent is less than the child
         {
-            a[k] = a[k/2];
-            hPos[a[k]] = k;
+            a[k] = a[k/2]; // move the parent down the heap
+            a[k/2] = v; // move the child up the heap
+            hPos[a[k]] = k; // update the position of the node in the heap, which is now at k
+
+            k = k/2; // move up the heap
+
+            hPos[a[k]] = k; // update the position of the node in the heap, which is now at k
+
         }
     }
 
@@ -57,17 +63,22 @@ class Heap
         j = 2*k;
         while(j <= N)
         {
-            if(j < N && dist[a[j]] < dist[a[j+1]])
+            if(j < N && dist[a[j]] < dist[a[j+1]]) // if the right child is greater than the left child
             {
                 j++;
             }
-            if(dist[v] >= dist[a[j]])
+            if(dist[v] >= dist[a[j]]) // if the parent is greater than the greater child
             {
                 break;
             }
-            a[k] = a[j];
-            k = j;
-            j = 2*k;
+            a[k] = a[j]; // move the greater child up the heap
+            k = j; // move down the heap
+            j = 2*k; // move down the heap
+
+            //update the position of the node in the heap, which is now at k
+            hPos[a[k]] = k;
+            //update the position of the node in the heap, which is now at j
+            hPos[a[j]] = j;
         }
 
 
