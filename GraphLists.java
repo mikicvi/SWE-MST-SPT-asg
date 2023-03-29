@@ -37,8 +37,8 @@ class Heap
         // code yourself
         // must use hPos[] and dist[] arrays
 
-        a[0] = Integer.MAX_VALUE;
-        while(dist[v] > dist[a[k/2]]) // while the parent is less than the child
+        dist[0] = Integer.MIN_VALUE; // set the first element to the max value
+        while(dist[v] < dist[a[k/2]]) // while the parent is less than the child
         {
             a[k] = a[k/2]; // move the parent down the heap
             a[k/2] = v; // move the child up the heap
@@ -61,25 +61,26 @@ class Heap
         // code yourself 
         // must use hPos[] and dist[] arrays
         j = 2*k;
+
         while(j <= N)
         {
-            if(j < N && dist[a[j]] < dist[a[j+1]]) // if the right child is greater than the left child
+            if(j < N && dist[a[j+1]] < dist[a[j]]) // if the right child is greater than the left child
             {
                 j++;
             }
-            if(dist[v] >= dist[a[j]]) // if the parent is greater than the greater child
+            if(dist[v] < dist[a[j]]) // if the parent is greater than the greater child
             {
                 break;
             }
             a[k] = a[j]; // move the greater child up the heap
-            k = j; // move down the heap
-            j = 2*k; // move down the heap
-
-            //update the position of the node in the heap, which is now at k
             hPos[a[k]] = k;
-            //update the position of the node in the heap, which is now at j
-            hPos[a[j]] = j;
+            k = j; // move down the heap
+            //update the position of the node in the heap, which is now at k
+            
+            j = 2*k; // move down the heap
         }
+        a[k] = v;
+        hPos[v] = k;
 
 
     }
@@ -169,17 +170,17 @@ class Graph {
             
             // write code to put edge into adjacency matrix
             
-            Node n = new Node();
-            n.vert = v;
-            n.wgt = wgt;
-            n.next = adj[u];
-            adj[u] = n;
+            Node n = new Node(); //node 1
+            n.vert = u; //set the ver to the vertex
+            n.wgt = wgt; // set the weight to the weight
+            n.next = adj[v]; // set the next node to the next node in the adjacency list
+            adj[v] = n; // set the adjacency list to the new node(1st node)
 
-            Node n2 = new Node();
-            n2.vert = u;
+            Node n2 = new Node(); //node 2
+            n2.vert = v; //set the ver to the vertex
             n2.wgt = wgt;
-            n2.next = adj[v];
-            adj[v] = n2;
+            n2.next = adj[u]; 
+            adj[u] = n2; // set the adjacency list to the new node (2nd node)
 
             
 
@@ -217,21 +218,54 @@ class Graph {
 
         dist = new int[V+1];
         hPos = new int[V+1];
-        //code here
+        parent = new int[V+1];
+
+        // initialise arrays
+        for(int i = 0; i<V+1; i++)
+        {
+            dist[i] = Integer.MAX_VALUE;
+            hPos[i] = 0;
+            parent[i] = 0;
+        }
         
-        //dist[s] = 0;
+        dist[s] = 0;
         
-        //Heap h =  new Heap(V, dist, hPos);
-        //h.insert(s);
+        Heap h =  new Heap(V, dist, hPos);
+        h.insert(s);
         
-        //while ( ...)  
-        //{
-            // most of alg here
+        while(!h.isEmpty())
+        {
+            v = h.remove(); // get the vertex with the smallest weight(remove it from the heap)
+            wgt_sum += dist[v]; // add the weight to the weight sum
             
-       // }
+            dist[v] = -dist[v]; // make the weight negative so we know it has been visited
+            
+            for(t = adj[v] ; t != z; t = t.next) //each neighbour of v
+            {
+                u = t.vert;
+                
+                wgt = t.wgt;
+
+                if(wgt < dist[u]) // if the weight of the neighbour is less than the weight of the current vertex
+                {
+                    dist[u] = wgt;
+                    parent[u] = v;
+                    
+                    if(hPos[u] == 0) // if the vertex is not in the heap
+                    {
+                        h.insert(u);
+                    }
+                    else
+                    { 
+                        h.siftUp(hPos[u]);
+                    }
+                }
+            }
+
+        }
+
         System.out.print("\n\nWeight of MST = " + wgt_sum + "\n");
-        
-                  		
+        mst = parent;         		
 	}
     
     public void showMST()
@@ -261,7 +295,8 @@ public class GraphLists {
 
        //g.DF(s);
        //g.breadthFirst(s);
-       //g.MST_Prim(s);   
+       g.MST_Prim(s); 
+       g.showMST();  
        //g.SPT_Dijkstra(s);               
     }
 }
