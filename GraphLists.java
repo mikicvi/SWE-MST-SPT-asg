@@ -2,6 +2,8 @@
 // Uses an Adjacency Linked Lists, suitable for sparse graphs
 
 import java.io.*;
+import java.util.Queue;
+import java.util.LinkedList;
 
 enum C { White, Gray, Black };
 
@@ -51,7 +53,7 @@ class Heap
         a[k] = v; // move the child up the heap
         hPos[v] = k; // update the position of the node in the heap, which is now at k
     }
-    
+
 
     public void siftDown( int k) 
     {
@@ -190,10 +192,7 @@ class Graph {
             n2.wgt = wgt;
             n2.next = adj[u]; 
             adj[u] = n2; // set the adjacency list to the new node (2nd node)
-
-            
-
-            
+ 
         }	       
     }
    
@@ -225,7 +224,7 @@ class Graph {
             {
                 colour[v] = C.White;
                 parent[v] = 0;
-                f[v]=0;
+                f[v] = 0;
             }
             time = 0;
             DFS_Visit(s);
@@ -254,6 +253,50 @@ class Graph {
             f[u] = ++time; // time increments when a node is finished
             
         }
+    // cormen's breadth first search algorithm
+    public void BFS(int s)
+    {
+        int u, v;
+        Node t;
+        Queue q = new Queue();
+
+        for (v = 1; v <=V; v++)
+        {
+            colour[v] = C.White;
+            parent[v] = 0;
+        }
+
+        colour[s] = C.Gray;
+        parent[s] = 0;
+        q.enqueue(s);
+
+        while(!q.isEmpty())
+        {
+            u = q.dequeue();
+            System.out.println("\n BFS Visiting vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
+
+            for(t = adj[u]; t !=z; t = t.next)
+            {
+                v = t.vert;
+                if(colour[v] == C.White)
+                {
+                    colour[v] = C.Gray;
+                    parent[v] = u;
+                    q.enqueue(v);
+                }
+            }
+            colour[u] = C.Black;
+        }
+
+    }
+    
+    
+    
+    
+    public void breadthFirst(int s)
+    {
+
+    }
 
     
 	public void MST_Prim(int s)
@@ -340,10 +383,10 @@ public class GraphLists {
        
         g.display();
 
-       g.DF(s);
-       //g.breadthFirst(s);
-       g.MST_Prim(s); 
-       g.showMST();  
+        g.DF(s);
+        //g.breadthFirst(s);
+        g.MST_Prim(s); 
+        g.showMST();  
        //g.SPT_Dijkstra(s);               
     }
 }
