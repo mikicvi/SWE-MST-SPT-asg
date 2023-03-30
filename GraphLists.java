@@ -293,8 +293,40 @@ class Graph {
     
     
     
+    // cormen's breadth first search algorithm
     public void breadthFirst(int s)
     {
+        int u, v;
+        Node t;
+        Queue<Integer> q = new LinkedList<>();
+
+        for (v = 1; v <=V; v++)
+        {
+            colour[v] = C.White;
+            parent[v] = 0;
+        }
+
+        colour[s] = C.Gray;
+        parent[s] = 0;
+        q.add(s);
+
+        while(!q.isEmpty())
+        {
+            u = q.remove();
+            System.out.println("\n BFS Visiting vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
+
+            for(t = adj[u]; t !=z; t = t.next)
+            {
+                v = t.vert;
+                if(colour[v] == C.White)
+                {
+                    colour[v] = C.Gray;
+                    parent[v] = u;
+                    q.add(v);
+                }
+            }
+            colour[u] = C.Black;
+        }
 
     }
 
