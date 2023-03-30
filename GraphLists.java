@@ -258,7 +258,7 @@ class Graph {
     {
         int u, v;
         Node t;
-        Queue q = new Queue();
+        Queue<Integer> q = new LinkedList<>();
 
         for (v = 1; v <=V; v++)
         {
@@ -268,11 +268,11 @@ class Graph {
 
         colour[s] = C.Gray;
         parent[s] = 0;
-        q.enqueue(s);
+        q.add(s);
 
         while(!q.isEmpty())
         {
-            u = q.dequeue();
+            u = q.remove();
             System.out.println("\n BFS Visiting vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
 
             for(t = adj[u]; t !=z; t = t.next)
@@ -282,7 +282,7 @@ class Graph {
                 {
                     colour[v] = C.Gray;
                     parent[v] = u;
-                    q.enqueue(v);
+                    q.add(v);
                 }
             }
             colour[u] = C.Black;
