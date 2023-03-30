@@ -3,6 +3,8 @@
 
 import java.io.*;
 
+enum C { White, Gray, Black };
+
 class Heap
 {
     private int[] a;	   // heap array
@@ -41,16 +43,15 @@ class Heap
         while(dist[v] < dist[a[k/2]]) // while the parent is less than the child
         {
             a[k] = a[k/2]; // move the parent down the heap
-            a[k/2] = v; // move the child up the heap
             hPos[a[k]] = k; // update the position of the node in the heap, which is now at k
-
             k = k/2; // move up the heap
 
-            hPos[a[k]] = k; // update the position of the node in the heap, which is now at k
-
+            
         }
+        a[k] = v; // move the child up the heap
+        hPos[v] = k; // update the position of the node in the heap, which is now at k
     }
-
+    
 
     public void siftDown( int k) 
     {
@@ -73,14 +74,14 @@ class Heap
                 break;
             }
             a[k] = a[j]; // move the greater child up the heap
-            hPos[a[k]] = k;
+            hPos[a[k]] = k; // update the position of the node in the heap, which is now at k
             k = j; // move down the heap
             //update the position of the node in the heap, which is now at k
             
             j = 2*k; // move down the heap
         }
-        a[k] = v;
-        hPos[v] = k;
+        a[k] = v; // move the parent down the heap
+        hPos[v] = k; // update the position of the node in the heap, which is now at k
 
 
     }
@@ -125,7 +126,9 @@ class Graph {
     // used for traversing graph
     private int[] visited;
     private int id;
-    
+    private C[] colour;
+    private int[] parent, d,f;
+    private int time;
     
     // default constructor
     public Graph(String graphFile)  throws IOException
@@ -148,6 +151,12 @@ class Graph {
         // create sentinel node
         z = new Node(); 
         z.next = z;
+
+        // initialise parent, colour, d, f arrays
+        parent = new int[V+1];
+        colour = new C[V+1];
+        d = new int[V+1];
+        f = new int[V+1];
         
         // create adjacency lists, initialised to sentinel node z       
         adj = new Node[V+1];        
@@ -207,6 +216,44 @@ class Graph {
         System.out.println("");
     }
 
+        //cormen's depth first search algorithm
+        public void DF(int s)
+        {
+            int v;
+    
+            for(v = 1; v <= V; ++v)
+            {
+                colour[v] = C.White;
+                parent[v] = 0;
+                f[v]=0;
+            }
+            time = 0;
+            DFS_Visit(s);
+        }
+    
+        public void DFS_Visit(int u)
+        {
+            Node t;
+            int v;
+    
+            colour[u] = C.Gray;
+            d[u] = ++time; //time increments when a node is visited
+    
+            System.out.println("\n DF Visiting vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
+    
+            for(t = adj[u]; t != z; t = t.next)
+            {
+                v = t.vert;
+                if(colour[v] == C.White) // if the node is white, it has not been visited
+                {
+                    parent[v] = u;
+                    DFS_Visit(v);
+                }
+            }
+            colour[u] = C.Black;
+            f[u] = ++time; // time increments when a node is finished
+            
+        }
 
     
 	public void MST_Prim(int s)
@@ -243,7 +290,6 @@ class Graph {
             for(t = adj[v] ; t != z; t = t.next) //each neighbour of v
             {
                 u = t.vert;
-                
                 wgt = t.wgt;
 
                 if(wgt < dist[u]) // if the weight of the neighbour is less than the weight of the current vertex
@@ -278,6 +324,7 @@ class Graph {
 
     public void SPT_Dijkstra(int s)
     {
+    
 
     }
 
@@ -286,14 +333,14 @@ class Graph {
 public class GraphLists {
     public static void main(String[] args) throws IOException
     {
-        int s = 2;
+        int s = 12;
         String fname = "wGraph3.txt";               
 
         Graph g = new Graph(fname);
        
         g.display();
 
-       //g.DF(s);
+       g.DF(s);
        //g.breadthFirst(s);
        g.MST_Prim(s); 
        g.showMST();  
