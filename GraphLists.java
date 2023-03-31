@@ -399,7 +399,8 @@ class Graph {
 
     public void SPT_Dijkstra(int s)
     {
-    
+        int v, u;
+        
 
     }
 
@@ -415,10 +416,10 @@ public class GraphLists {
        
         g.display();
 
-        g.DF(s);
+        //g.DF(s);
         //g.breadthFirst(s);
-        g.MST_Prim(s); 
-        g.showMST();  
+        //g.MST_Prim(s); 
+        //g.showMST();  
        //g.SPT_Dijkstra(s);               
     }
 }
