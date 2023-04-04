@@ -1,11 +1,7 @@
 // Kruskal's Minimum Spanning Tree Algorithm
 // Union-find implemented using disjoint set trees without compression
 
-//finish edge implementation - done
-//finish heap implementation - done? need to test
-//finish unionfind implementaiton -- done? test
-//modify and finish the siftdown implemenntation for kruskals - done
-// finally implement kruskals
+// Heap and Graph classes are renamed to Heap1 and Graph1 to avoid conflict with the Heap and Graph classes in the GraphLists.java file
 
 import java.io.*;
 
