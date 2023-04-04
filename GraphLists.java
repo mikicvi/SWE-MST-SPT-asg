@@ -383,6 +383,7 @@ class Graph
         }
 
         System.out.print("\n\nWeight of MST = " + wgt_sum + "\n");
+        System.out.println("");
         mst = parent;
     }
 
@@ -397,7 +398,60 @@ class Graph
     public void SPT_Dijkstra(int s)
     {
         int v, u;
+        int wgt, wgt_sum = 0;
+        int[] dist, parent, hPos;
+        Node t;
 
+        dist = new int[V + 1];
+        hPos = new int[V + 1];
+        parent = new int[V + 1];
+
+        // initialise arrays
+        for (int i = 0; i < V + 1; i++)
+        {
+            dist[i] = Integer.MAX_VALUE;
+            hPos[i] = 0;
+            parent[i] = 0;
+        }
+
+        dist[s] = 0;
+
+        Heap h = new Heap(V, dist, hPos);
+        h.insert(s);
+
+        while (!h.isEmpty())
+        {
+            v = h.remove(); // get the vertex with the smallest weight(remove it from the heap)
+
+            for (t = adj[v]; t != z; t = t.next) // each neighbour of v
+            {
+                u = t.vert;
+                wgt = t.wgt;
+
+                if (dist[v] + wgt < dist[u]) // if the weight of the neighbour is less than the weight of the current vertex
+                {
+                    dist[u] = dist[v] + wgt;
+                    parent[u] = v;
+
+                    if (hPos[u] == 0) // if the vertex is not in the heap
+                    {
+                        h.insert(u);
+                    }
+                    else
+                    {
+                        h.siftUp(hPos[u]);
+                    }
+                }
+            }
+
+        }
+        // Reconstruct the shortest path tree
+        System.out.print("Result from Dijkstra's algorithm vertex " + toChar(s) + ":\n");
+        for(v=1; v<=V; ++v)
+        {
+            System.out.print(toChar(v) + " -- " + dist[v] + " -- "+ toChar(parent[v]) + "\n");
+        }
+        System.out.println("");
     }
 
 }
@@ -413,10 +467,10 @@ public class GraphLists
 
         g.display();
 
-        g.DF(s);
-        g.breadthFirst(s);
+        //g.DF(s);
+        //g.breadthFirst(s);
         // g.MST_Prim(s);
         // g.showMST();
-        // g.SPT_Dijkstra(s);
+        g.SPT_Dijkstra(s);
     }
 }
