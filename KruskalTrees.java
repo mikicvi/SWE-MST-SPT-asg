@@ -1,8 +1,8 @@
 // Kruskal's Minimum Spanning Tree Algorithm
 // Union-find implemented using disjoint set trees without compression
 
-//finish edge implementation
-//finish heap implementation
+//finish edge implementation - done
+//finish heap implementation - done? need to test
 //finish unionfind implementaiton
 //modify and finish the siftdown implemenntation for kruskals
 // finally implement kruskals
@@ -22,7 +22,9 @@ class Edge
 
     public Edge(int x, int y, int w)
     {
-        ;// missing lines
+        u = x;
+        v = y;
+        wgt = w;
     }
 
     public void show()
@@ -59,7 +61,7 @@ class Heap
         // Then convert h[] into a heap
         // from the bottom up.
         for (i = N / 2; i > 0; --i)
-            ;// missing line;
+            siftDown(i);
 
     }
 
