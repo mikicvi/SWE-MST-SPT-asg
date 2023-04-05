@@ -6,7 +6,7 @@ import java.util.Queue;
 import java.util.LinkedList;
 
 enum C {
-    White, Gray, Black
+    White, Grey, Black
 };
 
 class Heap
@@ -237,7 +237,7 @@ class Graph
         Node t;
         int v;
 
-        colour[u] = C.Gray;
+        colour[u] = C.Grey;
         d[u] = ++time; // time increments when a node is visited
 
         System.out.println("\n DF Visiting vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
@@ -251,7 +251,7 @@ class Graph
                 DFS_Visit(v);
             }
         }
-        colour[u] = C.Black;
+        colour[u] = C.Black; // when all the nodes have been visited, the node is black
         f[u] = ++time; // time increments when a node is finished
 
     }
@@ -269,7 +269,7 @@ class Graph
             parent[v] = 0;
         }
 
-        colour[s] = C.Gray;
+        colour[s] = C.Grey;
         parent[s] = 0;
         q.add(s);
 
@@ -283,7 +283,7 @@ class Graph
                 v = t.vert;
                 if (colour[v] == C.White)
                 {
-                    colour[v] = C.Gray;
+                    colour[v] = C.Grey;
                     parent[v] = u;
                     q.add(v);
                 }
@@ -306,7 +306,7 @@ class Graph
             parent[v] = 0;
         }
 
-        colour[s] = C.Gray;
+        colour[s] = C.Grey;
         parent[s] = 0;
         q.add(s);
 
@@ -320,7 +320,7 @@ class Graph
                 v = t.vert;
                 if (colour[v] == C.White)
                 {
-                    colour[v] = C.Gray;
+                    colour[v] = C.Grey;
                     parent[v] = u;
                     q.add(v);
                 }
