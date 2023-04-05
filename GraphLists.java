@@ -235,8 +235,7 @@ class Graph
         colour[u] = C.Gray;
         d[u] = ++time; // time increments when a node is visited
 
-        System.out
-                .println("\n DF Visiting vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
+        System.out.println("\n DF Visiting vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
 
         for (t = adj[u]; t != z; t = t.next)
         {
@@ -272,8 +271,7 @@ class Graph
         while (!q.isEmpty())
         {
             u = q.remove();
-            System.out.println(
-                    "\n BFS Visiting vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
+            System.out.println("\n BFS Visiting vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
 
             for (t = adj[u]; t != z; t = t.next)
             {
@@ -310,8 +308,7 @@ class Graph
         while (!q.isEmpty())
         {
             u = q.remove();
-            System.out.println(
-                    "\n BFS Visiting vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
+            System.out.println("\n BFS Visiting vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
 
             for (t = adj[u]; t != z; t = t.next)
             {
