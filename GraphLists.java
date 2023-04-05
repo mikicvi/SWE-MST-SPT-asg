@@ -123,8 +123,8 @@ class Graph
     private int[] mst;
 
     // used for traversing graph
-    private int[] visited;
-    private int id;
+    // private int[] visited;
+    // private int id;
     private C[] colour;
     private int[] parent, d, f;
     private int time;
@@ -134,60 +134,65 @@ class Graph
     {
         int u, v;
         int e, wgt;
-        Node t;
+        //Node t;
 
         FileReader fr = new FileReader(graphFile);
-        BufferedReader reader = new BufferedReader(fr);
-
-        String splits = " +"; // multiple whitespace as delimiter
-        String line = reader.readLine();
-        String[] parts = line.split(splits);
-        System.out.println("Parts[] = " + parts[0] + " " + parts[1]);
-
-        V = Integer.parseInt(parts[0]);
-        E = Integer.parseInt(parts[1]);
-
-        // create sentinel node
-        z = new Node();
-        z.next = z;
-
-        // initialise parent, colour, d, f arrays
-        parent = new int[V + 1];
-        colour = new C[V + 1];
-        d = new int[V + 1];
-        f = new int[V + 1];
-
-        // create adjacency lists, initialised to sentinel node z
-        adj = new Node[V + 1];
-        for (v = 1; v <= V; ++v)
-            adj[v] = z;
-
-        // read the edges
-        System.out.println("Reading edges from text file");
-        for (e = 1; e <= E; ++e)
+        try (BufferedReader reader = new BufferedReader(fr))
         {
-            line = reader.readLine();
-            parts = line.split(splits);
-            u = Integer.parseInt(parts[0]);
-            v = Integer.parseInt(parts[1]);
-            wgt = Integer.parseInt(parts[2]);
+            String splits = " +"; // multiple whitespace as delimiter
+            String line = reader.readLine();
+            String[] parts = line.split(splits);
+            System.out.println("Parts[] = " + parts[0] + " " + parts[1]);
 
-            System.out.println("Edge " + toChar(u) + "--(" + wgt + ")--" + toChar(v));
+            V = Integer.parseInt(parts[0]);
+            E = Integer.parseInt(parts[1]);
 
-            // write code to put edge into adjacency matrix
+            // create sentinel node
+            z = new Node();
+            z.next = z;
 
-            Node n = new Node(); // node 1
-            n.vert = u; // set the ver to the vertex
-            n.wgt = wgt; // set the weight to the weight
-            n.next = adj[v]; // set the next node to the next node in the adjacency list
-            adj[v] = n; // set the adjacency list to the new node(1st node)
+            // initialise parent, colour, d, f arrays
+            parent = new int[V + 1];
+            colour = new C[V + 1];
+            d = new int[V + 1];
+            f = new int[V + 1];
 
-            Node n2 = new Node(); // node 2
-            n2.vert = v; // set the ver to the vertex
-            n2.wgt = wgt;
-            n2.next = adj[u];
-            adj[u] = n2; // set the adjacency list to the new node (2nd node)
+            // create adjacency lists, initialised to sentinel node z
+            adj = new Node[V + 1];
+            for (v = 1; v <= V; ++v)
+                adj[v] = z;
 
+            // read the edges
+            System.out.println("Reading edges from text file");
+            for (e = 1; e <= E; ++e)
+            {
+                line = reader.readLine();
+                parts = line.split(splits);
+                u = Integer.parseInt(parts[0]);
+                v = Integer.parseInt(parts[1]);
+                wgt = Integer.parseInt(parts[2]);
+
+                System.out.println("Edge " + toChar(u) + "--(" + wgt + ")--" + toChar(v));
+
+                // write code to put edge into adjacency matrix
+
+                Node n = new Node(); // node 1
+                n.vert = u; // set the ver to the vertex
+                n.wgt = wgt; // set the weight to the weight
+                n.next = adj[v]; // set the next node to the next node in the adjacency list
+                adj[v] = n; // set the adjacency list to the new node(1st node)
+
+                Node n2 = new Node(); // node 2
+                n2.vert = v; // set the ver to the vertex
+                n2.wgt = wgt;
+                n2.next = adj[u];
+                adj[u] = n2; // set the adjacency list to the new node (2nd node)
+
+            }
+        }
+        catch (NumberFormatException e1)
+        {
+            e1.printStackTrace();
         }
     }
 
@@ -380,6 +385,7 @@ class Graph
         }
 
         System.out.print("\n\nWeight of MST = " + wgt_sum + "\n");
+        System.out.println("");
         mst = parent;
     }
 
@@ -394,7 +400,60 @@ class Graph
     public void SPT_Dijkstra(int s)
     {
         int v, u;
+        int wgt;
+        int[] dist, parent, hPos;
+        Node t;
 
+        dist = new int[V + 1];
+        hPos = new int[V + 1];
+        parent = new int[V + 1];
+
+        // initialise arrays
+        for (int i = 0; i < V + 1; i++)
+        {
+            dist[i] = Integer.MAX_VALUE;
+            hPos[i] = 0;
+            parent[i] = 0;
+        }
+
+        dist[s] = 0;
+
+        Heap h = new Heap(V, dist, hPos);
+        h.insert(s);
+
+        while (!h.isEmpty())
+        {
+            v = h.remove(); // get the vertex with the smallest weight(remove it from the heap)
+
+            for (t = adj[v]; t != z; t = t.next) // each neighbour of v
+            {
+                u = t.vert;
+                wgt = t.wgt;
+
+                if (dist[v] + wgt < dist[u]) // if the weight of the neighbour is less than the weight of the current vertex
+                {
+                    dist[u] = dist[v] + wgt;
+                    parent[u] = v;
+
+                    if (hPos[u] == 0) // if the vertex is not in the heap
+                    {
+                        h.insert(u);
+                    }
+                    else
+                    {
+                        h.siftUp(hPos[u]);
+                    }
+                }
+            }
+
+        }
+        // Reconstruct the shortest path tree
+        System.out.print("Result from Dijkstra's algorithm vertex " + toChar(s) + ":\n");
+        for(v=1; v<=V; ++v)
+        {
+            System.out.print(toChar(v) + " -- " + dist[v] + " -- "+ toChar(parent[v]) + "\n");
+        }
+        System.out.println("");
     }
 
 }
@@ -412,8 +471,8 @@ public class GraphLists
 
         g.DF(s);
         g.breadthFirst(s);
-        // g.MST_Prim(s);
-        // g.showMST();
-        // g.SPT_Dijkstra(s);
+        g.MST_Prim(s);
+        g.showMST();
+        g.SPT_Dijkstra(s);
     }
 }

@@ -1,11 +1,7 @@
 // Kruskal's Minimum Spanning Tree Algorithm
 // Union-find implemented using disjoint set trees without compression
 
-//finish edge implementation
-//finish heap implementation
-//finish unionfind implementaiton
-//modify and finish the siftdown implemenntation for kruskals
-// finally implement kruskals
+// Heap and Graph classes are renamed to Heap1 and Graph1 to avoid conflict with the Heap and Graph classes in the GraphLists.java file
 
 import java.io.*;
 
@@ -22,7 +18,9 @@ class Edge
 
     public Edge(int x, int y, int w)
     {
-        ;// missing lines
+        u = x;
+        v = y;
+        wgt = w;
     }
 
     public void show()
@@ -37,14 +35,14 @@ class Edge
     }
 }
 
-class Heap
+class Heap1
 {
     private int[] h;
     int N, Nmax;
     Edge[] edge;
 
     // Bottom up heap construc
-    public Heap(int _N, Edge[] _edge)
+    public Heap1(int _N, Edge[] _edge)
     {
         int i;
         Nmax = N = _N;
@@ -59,7 +57,7 @@ class Heap
         // Then convert h[] into a heap
         // from the bottom up.
         for (i = N / 2; i > 0; --i)
-            ;// missing line;
+            siftDown(i);
 
     }
 
@@ -109,18 +107,24 @@ class UnionFindSets
     {
         N = V;
         treeParent = new int[V + 1];
-        // missing lines
+        // initially each vertex is in its own set
+        for (int i = 1; i <= N; ++i)
+            treeParent[i] = 0;
+        
+
     }
 
     public int findSet(int vertex)
     {
-        // missing lines
+        if (treeParent[vertex] == 0)
+            return vertex;
+        else
         return 0;
     }
 
     public void union(int set1, int set2)
     {
-        // missing
+        treeParent[set1] = set2;
     }
 
     public void showTrees()
@@ -164,47 +168,53 @@ class UnionFindSets
     }
 }
 
-class Graph
+class Graph1
 {
     private int V, E;
     private Edge[] edge;
     private Edge[] mst;
 
-    public Graph(String graphFile) throws IOException
+    public Graph1(String graphFile) throws IOException
     {
         int u, v;
         int w, e;
 
         FileReader fr = new FileReader(graphFile);
-        BufferedReader reader = new BufferedReader(fr);
-
-        String splits = " +"; // multiple whitespace as delimiter
-        String line = reader.readLine();
-        String[] parts = line.split(splits);
-        System.out.println("Parts[] = " + parts[0] + " " + parts[1]);
-
-        V = Integer.parseInt(parts[0]);
-        E = Integer.parseInt(parts[1]);
-
-        // create edge array
-        edge = new Edge[E + 1];
-
-        // read the edges
-        System.out.println("Reading edges from text file");
-        for (e = 1; e <= E; ++e)
+        try (BufferedReader reader = new BufferedReader(fr))
         {
-            line = reader.readLine();
-            parts = line.split(splits);
-            u = Integer.parseInt(parts[0]);
-            v = Integer.parseInt(parts[1]);
-            w = Integer.parseInt(parts[2]);
-
-            System.out.println("Edge " + toChar(u) + "--(" + w + ")--" + toChar(v));
-
-            // create Edge object
+            String splits = " +"; // multiple whitespace as delimiter
+            String line = reader.readLine();
+            String[] parts = line.split(splits);
+            System.out.println("Parts[] = " + parts[0] + " " + parts[1]);
+            
+            V = Integer.parseInt(parts[0]);
+            E = Integer.parseInt(parts[1]);
+            
+            // create edge array
+            edge = new Edge[E + 1];
+            
+            // read the edges
+            System.out.println("Reading edges from text file");
+            for (e = 1; e <= E; ++e)
+            {
+                line = reader.readLine();
+                parts = line.split(splits);
+                u = Integer.parseInt(parts[0]);
+                v = Integer.parseInt(parts[1]);
+                w = Integer.parseInt(parts[2]);
+                
+                System.out.println("Edge " + toChar(u) + "--(" + w + ")--" + toChar(v));
+                
+                // create Edge object
+                edge[e] = new Edge(u, v, w); // u(first vertex), v(second vertex), w(weight)
+            }
+        }
+        catch (NumberFormatException e1)
+        {
+            e1.printStackTrace();
         }
     }
-
+    
     /**********************************************************
      * Kruskal's minimum spanning tree algorithm
      **********************************************************/
@@ -218,11 +228,36 @@ class Graph
         // create edge array to store MST
         // Initially it has no edges.
         mst = new Edge[V - 1];
+        for(i = 0; i < V - 1; ++i)
+            mst[i] = new Edge(0, 0, 0);
+
 
         // priority queue for indices of array of edges
-        Heap h = new Heap(E, edge);
+        Heap1 h = new Heap1(E, edge);
 
         // create partition of singleton sets for the vertices
+        partition = new UnionFindSets(V);
+
+        // repeat until MST has V-1 edges
+        i = 0;
+        while (i < V - 1)
+        {
+            // remove edge with minimum weight from heap
+            ei = h.remove();
+            e = edge[ei];
+
+            // find the sets containing the two endpoints
+            uSet = partition.findSet(e.u);
+            vSet = partition.findSet(e.v);
+
+            // if endpoints are in different sets
+            // then add edge to MST and union the two sets
+            if (uSet != vSet)
+            {
+                mst[i++] = e;
+                partition.union(uSet, vSet);
+            }
+        }
 
         return mst;
     }
@@ -231,6 +266,17 @@ class Graph
     private char toChar(int u)
     {
         return (char) (u + 64);
+    }
+    
+    // show the total cost of the minimum spanning tree
+    public void totalCost()
+    {
+        int total = 0;
+        for (int i = 0; i < V - 1; ++i)
+        {
+            total += mst[i].wgt;
+        }
+        System.out.println("The total cost of the minimum spanning tree is: " + total);
     }
 
     public void showMST()
@@ -241,6 +287,7 @@ class Graph
             mst[e].show();
         }
         System.out.println();
+        totalCost();
 
     }
 
@@ -255,11 +302,11 @@ class KruskalTrees
         // System.out.print("\nInput name of file with graph definition: ");
         // fname = Console.ReadLine();
 
-        Graph g = new Graph(fname);
+        Graph1 graph = new Graph1(fname);
 
-        // g.MST_Kruskal();
+        graph.MST_Kruskal();
 
-        // g.showMST();
+        graph.showMST();
 
     }
 }
