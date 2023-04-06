@@ -368,8 +368,8 @@ class Graph
 
                 if (wgt < dist[u]) // if the weight of the neighbour is less than the weight of the current vertex
                 {
-                    dist[u] = wgt;
-                    parent[u] = v;
+                    dist[u] = wgt; // update the weight
+                    parent[u] = v; // update the parent
 
                     if (hPos[u] == 0) // if the vertex is not in the heap
                     {
@@ -432,8 +432,8 @@ class Graph
 
                 if (dist[v] + wgt < dist[u]) // if the weight of the neighbour is less than the weight of the current vertex
                 {
-                    dist[u] = dist[v] + wgt;
-                    parent[u] = v;
+                    dist[u] = dist[v] + wgt; 
+                    parent[u] = v; 
 
                     if (hPos[u] == 0) // if the vertex is not in the heap
                     {
