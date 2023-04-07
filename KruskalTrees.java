@@ -119,11 +119,14 @@ class UnionFindSets
         if (treeParent[vertex] == 0)
             return vertex;
         else
-        return 0;
+        {
+            return findSet(treeParent[vertex]);
+        }
     }
 
     public void union(int set1, int set2)
     {
+        System.out.println("Union " + toChar(set1) + " " + toChar(set2));
         treeParent[set1] = set2;
     }
 
@@ -131,7 +134,7 @@ class UnionFindSets
     {
         int i;
         for (i = 1; i <= N; ++i)
-            System.out.print(toChar(i) + "->" + toChar(treeParent[i]) + "  ");
+            System.out.print(toChar(i) + "->" + toChar(treeParent[i]) + "  "); 
         System.out.print("\n");
     }
 
@@ -224,7 +227,6 @@ class Graph1
         Edge e;
         int uSet, vSet;
         UnionFindSets partition;
-
         // create edge array to store MST
         // Initially it has no edges.
         mst = new Edge[V - 1];
@@ -257,8 +259,16 @@ class Graph1
                 mst[i++] = e;
                 partition.union(uSet, vSet);
             }
+            partition.showSets();
+            
         }
-
+        // show sets
+        System.out.println("\nSets:");
+        partition.showSets();
+        // show trees
+        System.out.println("\nTrees:");
+        partition.showTrees();
+        
         return mst;
     }
 
@@ -290,6 +300,7 @@ class Graph1
         totalCost();
 
     }
+
 
 } // end of Graph class
 

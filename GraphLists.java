@@ -410,7 +410,7 @@ class Graph
 
         }
         // Reconstruct the shortest path tree
-        System.out.print("Result from Dijkstra's algorithm vertex " + toChar(s) + ":\n");
+        System.out.print("Result from Dijkstra's algorithm starting vertex " + toChar(s) + ":\n");
         for(v=1; v<=V; ++v)
         {
             System.out.print(toChar(v) + " -- " + dist[v] + " -- "+ toChar(parent[v]) + "\n");
