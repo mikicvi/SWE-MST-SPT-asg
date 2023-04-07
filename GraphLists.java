@@ -221,7 +221,7 @@ class Graph
     public void DF(int s)
     {
         int v;
-
+        System.out.println("\n");
         for (v = 1; v <= V; ++v)
         {
             colour[v] = C.White;
@@ -240,7 +240,7 @@ class Graph
         colour[u] = C.Grey;
         d[u] = ++time; // time increments when a node is visited
 
-        System.out.println("\n DF Visiting vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
+        System.out.println("DF Visiting vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
 
         for (t = adj[u]; t != z; t = t.next)
         {
@@ -253,44 +253,6 @@ class Graph
         }
         colour[u] = C.Black; // when all the nodes have been visited, the node is black
         f[u] = ++time; // time increments when a node is finished
-
-    }
-
-    // cormen's breadth first search algorithm
-    public void BFS(int s)
-    {
-        int u, v;
-        Node t;
-        Queue<Integer> q = new LinkedList<>();
-
-        for (v = 1; v <= V; v++)
-        {
-            colour[v] = C.White;
-            parent[v] = 0;
-        }
-
-        colour[s] = C.Grey;
-        parent[s] = 0;
-        q.add(s);
-
-        while (!q.isEmpty())
-        {
-            u = q.remove();
-            System.out.println("\n BFS Visiting vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
-
-            for (t = adj[u]; t != z; t = t.next)
-            {
-                v = t.vert;
-                if (colour[v] == C.White)
-                {
-                    colour[v] = C.Grey;
-                    parent[v] = u;
-                    q.add(v);
-                }
-            }
-            colour[u] = C.Black;
-        }
-
     }
 
     // cormen's breadth first search algorithm
@@ -309,11 +271,11 @@ class Graph
         colour[s] = C.Grey;
         parent[s] = 0;
         q.add(s);
-
+        System.out.println("\n");
         while (!q.isEmpty())
         {
             u = q.remove();
-            System.out.println("\n BFS Visiting vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
+            System.out.println("BFS Visiting vertex " + toChar(u) + " along edge " + toChar(parent[u]) + "--" + toChar(u));
 
             for (t = adj[u]; t != z; t = t.next)
             {
@@ -384,14 +346,14 @@ class Graph
 
         }
 
-        System.out.print("\n\nWeight of MST = " + wgt_sum + "\n");
+        System.out.print("\n\nWeight of MST = " + wgt_sum);
         System.out.println("");
         mst = parent;
     }
 
     public void showMST()
     {
-        System.out.print("\n\nMinimum Spanning tree parent array is:\n");
+        System.out.print("\nMinimum Spanning tree parent array is:\n");
         for (int v = 1; v <= V; ++v)
             System.out.println(toChar(v) + " -> " + toChar(mst[v]));
         System.out.println("");
