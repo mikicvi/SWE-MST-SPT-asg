@@ -4,6 +4,7 @@
 // Heap and Graph classes are renamed to Heap1 and Graph1 to avoid conflict with the Heap and Graph classes in the GraphLists.java file
 
 import java.io.*;
+import java.util.Scanner;
 
 class Edge
 {
@@ -309,11 +310,18 @@ class KruskalTrees
 {
     public static void main(String[] args) throws IOException
     {
-        String fname = "wGraph3.txt";
-        // System.out.print("\nInput name of file with graph definition: ");
-        // fname = Console.ReadLine();
+        int s;
+        String gname;
 
-        Graph1 graph = new Graph1(fname);
+        System.out.println("Enter the starting vertex: ");
+        try (Scanner sc = new Scanner(System.in))
+        {
+            s = sc.nextInt();
+            System.out.println("Enter the graph file name: ");
+            gname = sc.next();
+        }
+
+        Graph1 graph = new Graph1(gname);
 
         graph.MST_Kruskal();
 

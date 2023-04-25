@@ -3,6 +3,7 @@
 
 import java.io.*;
 import java.util.Queue;
+import java.util.Scanner;
 import java.util.LinkedList;
 
 enum C {
@@ -424,10 +425,18 @@ public class GraphLists
 {
     public static void main(String[] args) throws IOException
     {
-        int s = 12;
-        String fname = "wGraph3.txt";
+        int s;
+        String gname;
 
-        Graph g = new Graph(fname);
+        System.out.println("Enter the starting vertex: ");
+        try (Scanner sc = new Scanner(System.in))
+        {
+            s = sc.nextInt();
+            System.out.println("Enter the graph file name: ");
+            gname = sc.next();
+        }
+        
+        Graph g = new Graph(gname);
 
         g.display();
 
